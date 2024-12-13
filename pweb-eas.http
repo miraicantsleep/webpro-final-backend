@@ -1,0 +1,6 @@
+@pweb_eas_HostAddress = http://localhost:5068
+
+GET {{pweb_eas_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

@@ -1,5 +1,6 @@
 using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
@@ -64,6 +65,8 @@ builder.Services.AddAuthentication(options =>
     };
 });
 
+builder.Services.AddHealthChecks();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -73,10 +76,12 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-// app.UseHttpsRedirection();
+ app.UseHttpsRedirection();
 
 app.UseAuthentication();
 app.UseAuthorization();
+
+app.MapHealthChecks("/health");
 
 app.MapControllers();
 

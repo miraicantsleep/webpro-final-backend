@@ -34,6 +34,7 @@ namespace pweb_eas.Controllers
             {
                 return BadRequest(new
                 {
+                    status = false,
                     message = "user already exists"
                 });
             }
@@ -56,6 +57,7 @@ namespace pweb_eas.Controllers
 
             return Ok(new
             {
+                status = true,
                 message = "success register user",
                 user = new
                 {
@@ -75,6 +77,7 @@ namespace pweb_eas.Controllers
             {
                 return BadRequest(new
                 {
+                    status = false,
                     message = "invalid credentials"
                 });
             }
@@ -83,6 +86,7 @@ namespace pweb_eas.Controllers
 
             return Ok(new
             {
+                status = true,
                 message = "login successful",
                 data = new { user.Id, user.Email, user.Name, user.Role, token },
             });

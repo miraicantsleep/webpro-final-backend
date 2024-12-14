@@ -30,6 +30,7 @@ namespace pweb_eas.Controllers
             {
                 return Unauthorized(new
                 {
+                    status = false,
                     message = "user not found"
                 });
             }
@@ -39,6 +40,7 @@ namespace pweb_eas.Controllers
             {
                 return NotFound(new
                 {
+                    status = false,
                     message = "user not found"
                 });
             }
@@ -61,7 +63,7 @@ namespace pweb_eas.Controllers
 
             return Ok(new
             {
-                status = "true",
+                status = true,
                 message = "success add transaction",
                 data = new {
                     id = transaction.Id,
@@ -83,8 +85,19 @@ namespace pweb_eas.Controllers
                 var transactions = await dbContext.Transactions.ToListAsync();
                 return Ok(new
                 {
+                    status = true,
                     message = "success get all transactions",
-                    transactions
+                    data = new {
+                        count = transactions.Count,
+                        data = transactions.Select(t => new {
+                            id = t.Id,
+                            owner = t.UserId,
+                            name = t.Name,
+                            type = t.Type,
+                            amount = t.Amount,
+                            notes = t.Notes
+                        })
+                    }
                 });
             }
 
@@ -94,7 +107,7 @@ namespace pweb_eas.Controllers
                 var transactions = await dbContext.Transactions.Where(t => t.UserId.ToString() == userId).ToListAsync();
                 return Ok(new
                 {
-                    status = "true",
+                    status = true,
                     message = "success get all transactions",
                     data = new {
                         count = transactions.Count,
@@ -112,6 +125,7 @@ namespace pweb_eas.Controllers
 
             return Unauthorized(new
             {
+                status = false,
                 message = "invalid roles",
                 role
             });
@@ -128,14 +142,23 @@ namespace pweb_eas.Controllers
                 {
                     return NotFound(new
                     {
+                        status = false,
                         message = "transaction not found"
                     });
                 }
 
                 return Ok(new
                 {
+                    status = true,
                     message = "success get transaction",
-                    transaction
+                    data = new {
+                        id = transaction.Id,
+                        owner = transaction.UserId,
+                        name = transaction.Name,
+                        type = transaction.Type,
+                        amount = transaction.Amount,
+                        notes = transaction.Notes
+                    }
                 });
             }
 
@@ -147,13 +170,14 @@ namespace pweb_eas.Controllers
                 {
                     return NotFound(new
                     {
+                        status = false,
                         message = "transaction not found"
                     });
                 }
 
                 return Ok(new
                 {
-                    status = "true",
+                    status = true,
                     message = "success get transaction",
                     data = new {
                         id = transaction.Id,
@@ -167,6 +191,7 @@ namespace pweb_eas.Controllers
             }
             return Unauthorized(new
             {
+                status = false,
                 message = "invalid roles",
                 role
             });
@@ -183,6 +208,7 @@ namespace pweb_eas.Controllers
                 {
                     return NotFound(new
                     {
+                        status = false,
                         message = "transaction not found"
                     });
                 }
@@ -198,8 +224,9 @@ namespace pweb_eas.Controllers
 
                 return Ok(new
                 {
+                    status = true,
                     message = "success update transaction",
-                    transaction
+                    transaction // <---- fix this
                 });
             }
 
@@ -211,6 +238,7 @@ namespace pweb_eas.Controllers
                 {
                     return NotFound(new
                     {
+                        status = false,
                         message = "transaction not found"
                     });
                 }
@@ -226,7 +254,7 @@ namespace pweb_eas.Controllers
 
                 return Ok(new
                 {
-                    status = "true",
+                    status = true,
                     message = "success update transaction",
                     data = new {
                         id = transaction.Id,
@@ -240,6 +268,7 @@ namespace pweb_eas.Controllers
             }
             return Unauthorized(new
             {
+                status = false,
                 message = "invalid roles",
                 role
             });
@@ -256,6 +285,7 @@ namespace pweb_eas.Controllers
                 {
                     return NotFound(new
                     {
+                        status = false,
                         message = "transaction not found"
                     });
                 }
@@ -265,8 +295,8 @@ namespace pweb_eas.Controllers
 
                 return Ok(new
                 {
+                    status = true,
                     message = "success delete transaction",
-                    transaction
                 });
             }
 
@@ -278,6 +308,7 @@ namespace pweb_eas.Controllers
                 {
                     return NotFound(new
                     {
+                        status = false,
                         message = "transaction not found"
                     });
                 }
@@ -287,12 +318,13 @@ namespace pweb_eas.Controllers
 
                 return Ok(new
                 {
-                    status = "true",
+                    status = true,
                     message = "success delete transaction"
                 });
             }
             return Unauthorized(new
             {
+                status = false,
                 message = "invalid roles",
                 role
             });
